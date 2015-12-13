@@ -61,8 +61,8 @@ class User(models.Model):
     |   utime    datetime   32    no    用户注册时间
     ---------------------------------------------------
     """
-    did    = models.ForeignKey(Dgroup, verbose_name="大队外键")        # 大队外键表
-    zid    = models.ForeignKey(Zgroup, verbose_name="中队外键")        # 中队外键表
+    did    = models.ForeignKey(Dgroup)        # 大队外键表
+    zid    = models.ForeignKey(Zgroup)        # 中队外键表
     uname  = models.CharField(max_length=32, verbose_name="用户名")  # 用户名
     upass  = models.CharField(max_length=32, verbose_name="密码")  # 密码
     utime  = models.DateTimeField(verbose_name="注册时间")           # 注册时间
@@ -85,41 +85,14 @@ class Admin(models.Model):
     atime   = models.DateTimeField(verbose_name="管理员创建时间")
 
     def __str__(self):
-        return "管理员用户ID为： " + self.uid
-
-
-#--------------------------------增援信息表---------------------------------
-class Reinforce(models.Model):
-    """
-    ------------------------------------------------------------
-    |    rid            int          8    no    主键
-    |    zid            int          8    no    中队表外键
-    |    fcar           int          8    no    出动 车辆数
-    |    fperson        int          8    no    出动人员数
-    |    rhelptime      datetime    32    no    增援到场时间
-    |    rfinishtime    datetime    32    no    结束时间
-    |    rtime          datetime    32    no    填表时间
-    ------------------------------------------------------------
-    """
-    zid         = models.ForeignKey(Zgroup)    # 中队外键表
-    fcar        = models.IntegerField(verbose_name="增援出动车辆数")        # 出动车辆数
-    fperson     = models.IntegerField(verbose_name="增援出动人员数")        # 出动人员数
-    rhelptime   = models.DateTimeField(verbose_name="增援到长时间")       # 增援到场时间
-    rfinishtime = models.DateTimeField(verbose_name="增援结束时间")       # 结束时间
-    rtime       = models.DateTimeField(verbose_name="填表时间")       # 填表时间
-
-    def __str__(self):
-        return "增援中队外键为： "+self.zid
-
-
+        return "管理员用户ID为： " + str(self.uid)
 
 
 #---------------------------------火场信息表-----------------------------
 class Fireinfo(models.Model):
     """
     ----------------------------------------------------------------
-    |    fid          int         8    no    主键
-    |    rid          int         8    no    增援表外键
+
     |    zid          int         8    no    中队表外键
     |    fcar         int         8    no    出动 车辆数
     |    fperson      int         8    no    出动人员数
@@ -138,8 +111,7 @@ class Fireinfo(models.Model):
     |    ftime        datetime   32    no    填表时间
     ----------------------------------------------------------------
     """
-    rid = models.ForeignKey(Reinforce,verbose_name="增援外键")              # 增援表外键
-    zid  = models.ForeignKey(Zgroup, verbose_name="中队外键")                # 中队表外键
+    zid  = models.ForeignKey(Zgroup, verbose_name="主战中队")                # 中队表外键
     fcar = models.IntegerField(verbose_name="出动车辆数")                    # 出动车辆数
     fperson = models.IntegerField(verbose_name="出动人员数")                 # 出动人员数
     faddr = models.CharField(max_length=32,verbose_name="事故现场地址")         # 事故现场地址
@@ -158,3 +130,31 @@ class Fireinfo(models.Model):
 
     def __str__(self):
         return "火场信息：地址为 " + self.faddr + " 着火类型 " + self.ftype + " 事故原因 " + self.freason
+
+
+
+
+#--------------------------------增援信息表---------------------------------
+class Reinforce(models.Model):
+    """
+    ------------------------------------------------------------
+    |    rid            int          8    no    主键
+    |    id             int          8    no    火场外键
+    |    zid            int          8    no    中队表外键
+    |    fcar           int          8    no    出动 车辆数
+    |    fperson        int          8    no    出动人员数
+    |    rhelptime      datetime    32    no    增援到场时间
+    |    rfinishtime    datetime    32    no    结束时间
+    |    rtime          datetime    32    no    填表时间
+    ------------------------------------------------------------
+    """
+    fid         = models.ForeignKey(Fireinfo, verbose_name="增援火场")                                #火场外键表
+    zid         = models.ForeignKey(Zgroup, verbose_name="增援中队")                                  # 中队外键表
+    fcar        = models.IntegerField(verbose_name="增援出动车辆数")        # 出动车辆数
+    fperson     = models.IntegerField(verbose_name="增援出动人员数")        # 出动人员数
+    rhelptime   = models.DateTimeField(verbose_name="增援到长时间")         # 增援到场时间
+    rfinishtime = models.DateTimeField(verbose_name="增援结束时间")         # 结束时间
+    rtime       = models.DateTimeField(verbose_name="填表时间")             # 填表时间
+
+    def __str__(self):
+        return "增援中队外键为： "+str(self.zid)+"火场外键表为： "+ str(self.fid)
