@@ -17,5 +17,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^frrs/', include('frrs.urls', namespace='frrs')),#设置应用的命名空间为frrs
     url(r'^admin/', include(admin.site.urls)),
 ]

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Admin',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
                 ('apower', models.IntegerField(verbose_name='权限')),
                 ('atime', models.DateTimeField(verbose_name='管理员创建时间')),
             ],
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Dgroup',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
                 ('dname', models.CharField(max_length=32, verbose_name='大队名称')),
                 ('daddr', models.CharField(max_length=32, verbose_name='大队地址')),
                 ('dtime', models.DateTimeField(verbose_name='大队创建时间')),
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Fireinfo',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
                 ('fcar', models.IntegerField(verbose_name='出动车辆数')),
                 ('fperson', models.IntegerField(verbose_name='出动人员数')),
                 ('faddr', models.CharField(max_length=32, verbose_name='事故现场地址')),
@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Reinforce',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
                 ('fcar', models.IntegerField(verbose_name='增援出动车辆数')),
                 ('fperson', models.IntegerField(verbose_name='增援出动人员数')),
                 ('rhelptime', models.DateTimeField(verbose_name='增援到长时间')),
@@ -63,17 +63,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='User',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
                 ('uname', models.CharField(max_length=32, verbose_name='用户名')),
                 ('upass', models.CharField(max_length=32, verbose_name='密码')),
                 ('utime', models.DateTimeField(verbose_name='注册时间')),
+                ('aid', models.ForeignKey(to='frrs.Admin')),
                 ('did', models.ForeignKey(to='frrs.Dgroup')),
             ],
         ),
         migrations.CreateModel(
             name='Zgroup',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
                 ('zname', models.CharField(max_length=32, verbose_name='中队名称')),
                 ('zaddr', models.CharField(max_length=32, verbose_name='中队地址')),
                 ('ztime', models.DateTimeField(verbose_name='中队创建时间')),
@@ -94,10 +95,5 @@ class Migration(migrations.Migration):
             model_name='fireinfo',
             name='zid',
             field=models.ForeignKey(to='frrs.Zgroup', verbose_name='主战中队'),
-        ),
-        migrations.AddField(
-            model_name='admin',
-            name='uid',
-            field=models.ForeignKey(to='frrs.User'),
         ),
     ]

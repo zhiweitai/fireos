@@ -46,7 +46,20 @@ class Zgroup(models.Model):
     def __str__(self):
         return "中队名称为：" + self.zname
 
+#----------------------------管理员权限表---------------------------
+class Admin(models.Model):
+    """
+    -----------------------------------------------------------
+    |    aid         int          8    no    主键
+    |    apower      int         11    no    权限    或许用1248 2的0 2的1 2的2 2的3次方形式更好？
+    |    atime       datetime    32    no    授权时间
+    -----------------------------------------------------------
+    """
+    apower  = models.IntegerField(verbose_name="权限")
+    atime   = models.DateTimeField(verbose_name="管理员创建时间")
 
+    def __str__(self):
+        return "管理员用户ID为： " + str(self.apower)
 
 
 #--------------------------------用户表-----------------------------
@@ -54,38 +67,22 @@ class User(models.Model):
     """
     ---------------------------------------------------
     |   uid      int         8    no    主键
-    |   did      int         8    no    大队表外键
     |   zid      int         8    no    中队表外键
+    |   aid      int         8    no    管理员权限表外键
     |   uname    varchar    32    no    用户名
     |   upass    varchar    32    no    密码
     |   utime    datetime   32    no    用户注册时间
     ---------------------------------------------------
     """
-    did    = models.ForeignKey(Dgroup)        # 大队外键表
+
     zid    = models.ForeignKey(Zgroup)        # 中队外键表
+    aid    = models.ForeignKey(Admin)         # 管理员权限外键
     uname  = models.CharField(max_length=32, verbose_name="用户名")  # 用户名
     upass  = models.CharField(max_length=32, verbose_name="密码")  # 密码
     utime  = models.DateTimeField(verbose_name="注册时间")           # 注册时间
 
     def __str__(self):
         return "用户名为：" + self.uname
-
-#----------------------------管理员权限表---------------------------
-class Admin(models.Model):
-    """
-    -----------------------------------------------------------
-    |    aid         int          8    no    主键
-    |    uid         int          8    no    用户表外键
-    |    apower      int         11    no    权限    或许用1248 2的0 2的1 2的2 2的3次方形式更好？
-    |    atime       datetime    32    no    授权时间
-    -----------------------------------------------------------
-    """
-    uid     = models.ForeignKey(User)
-    apower  = models.IntegerField(verbose_name="权限")
-    atime   = models.DateTimeField(verbose_name="管理员创建时间")
-
-    def __str__(self):
-        return "管理员用户ID为： " + str(self.uid)
 
 
 #---------------------------------火场信息表-----------------------------
